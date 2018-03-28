@@ -1,6 +1,6 @@
 {
   "name": "parser",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -17,18 +17,20 @@
       "js",
       "json"
     ],
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$"
+    "testRegex": "(\/__tests__\/.+(test|spec)\\.(ts|tsx|js))$"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "jongelboga",
+  "license": "MIT",
   "dependencies": {
+    "handlebars": "^4.0.11",
+    "markdown-it": "^8.4.1"
+  },
+  "devDependencies": {
     "@types/handlebars": "^4.0.36",
     "@types/jest": "^22.2.2",
     "@types/markdown-it": "^0.0.4",
     "@types/node": "^9.6.0",
-    "handlebars": "^4.0.11",
     "jest": "^22.4.3",
-    "markdown-it": "^8.4.1",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
     "tslint-eslint-rules": "^5.1.0",

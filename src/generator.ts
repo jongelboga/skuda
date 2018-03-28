@@ -12,17 +12,33 @@ const filepath = path.resolve(__dirname, '../template.handlebars')
 const file = fs.readFileSync(filepath).toString()
 const template = handlebars.compile<TemplateParameters>(file)
 
-const outDir = path.resolve(__dirname, '../dist/')
+function mkDir (p: string) {
+	try {
+		fs.mkdirSync(p)
+	} catch (err) {
+		const error: NodeJS.ErrnoException = err
+		if (error.code === 'EEXIST') {
+			// TODO: Remove directory
+		}
+		else {
+			throw error
+		}
+	}
+}
 
+export function generate (outDir: string, folder: Folder): void {
+	const ogFolder = folder
+	function recursiveGen ({ pages, folders }: Folder) {
+		pages
+			.map(page => generatePage(page, ogFolder))
+			.forEach(page => {
+				fs.writeFileSync(path.join(outDir, `${page.name}.html`), page.template)
+			})
+		folders.map(recursiveGen)
+	}
 
-export function generate (folder: Folder, originalFolder?: Folder): void {
-	const ogFolder = originalFolder || folder
-	folder.pages
-		.map(page => generatePage(page, ogFolder))
-		.forEach(page => {
-			fs.writeFileSync(path.join(outDir, `${page.name}.html`), page.template)
-		})
-	folder.folders.map(f => generate(f, ogFolder))
+	mkDir(outDir)
+	recursiveGen(folder)
 }
 
 function generatePage (page: Page, folder: Folder) {

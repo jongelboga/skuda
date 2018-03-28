@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { readDir } from '../src/utils'
+import { ROOT_DIR } from './constants'
 
 it('parses folder', () => {
-	const rootDir = path.resolve(__dirname, '../../website/content')
-	console.log(readDir(rootDir))
+	console.log(readDir(ROOT_DIR))
 })
