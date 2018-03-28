@@ -1,6 +1,6 @@
 import * as fs from 'fs'
-import * as path from 'path'
 import * as Markdown from 'markdown-it'
+import * as path from 'path'
 
 type File = {
 	name: string
@@ -18,7 +18,7 @@ export type Folder = File & {
 }
 
 
-const md = new Markdown();
+const md = new Markdown()
 
 export function readDir (dir: string, name?: string): Folder {
 	const isDir = (p: string) => fs.lstatSync(p).isDirectory()
@@ -26,7 +26,7 @@ export function readDir (dir: string, name?: string): Folder {
 	const paths = fs.readdirSync(dir).map<File>(p => ({
 		name: p,
 		path: path.join(dir, p) }
-	));
+	))
 	const folders = paths.filter(p => isDir(p.path))
 	const pages = paths.filter(p => !isDir(p.path))
 
