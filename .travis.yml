@@ -7,3 +7,6 @@ cache: yarn
 script:
   - npm lint
   - npm test
+
+notifications:
+  email: false
