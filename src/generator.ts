@@ -4,12 +4,21 @@ import * as path from 'path'
 import { Folder, Page } from './utils'
 
 /**
- * Structure given to the Template Rendering engine
+ * Structure given to the Template Rendering engine.
  * @type {Object}
  */
 type TemplateParameters = {
 	name: string
-	rendered: string
+	rendered: string,
+	footer: string,
+	footer_rendered: string,
+	description: string,
+	navbar: [
+		{
+			name: string,
+			uri: string
+		}
+	]
 }
 
 // Reading and compiling the main HTML template used to generate pages
@@ -35,12 +44,14 @@ function mkDir (p: string) {
 
 /**
  * Main function to generate a output folder based on a Folder structure.
- * Called recursively.
  * @param {string} outDir Destination folder
  * @param {Folder} folder Folder object.
  */
 export function generate (outDir: string, folder: Folder): void {
 	const ogFolder = folder
+
+	// Recursive function for traversing the Folder tree structure and
+	// generate files.
 	function recursiveGen ({ pages, folders }: Folder) {
 		pages
 			.map(page => generatePage(page, ogFolder))

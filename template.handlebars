@@ -3,16 +3,24 @@
   <head>
     <meta charset="UTF-8">
 		<title>{{name}}</title>
+		{{#description}}<description>{{description}}</description>{{/description}}
   </head>
   <body>
-	<navbar>
-
-	</navbar>
+	{{#navbar}}
+	<nav>
+		<ul>
+			<a href="{{uri}}">{{name}}</a>
+		</ul>
+	</nav>>
+	{{/navbar}}
 	<main>
     	{{{rendered}}}
 	</main>
+	
+	{{#footer}}
 	<footer>
-
+		{{{footer_rendered}}}
 	</footer>
+	{{/footer}}
   </body>
 </html>

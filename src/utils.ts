@@ -19,6 +19,16 @@ export type Page = File & {
 }
 
 /**
+ * Media files. When generating the structure, the generator may need
+ * to rescale and convert files to different formats.
+ */
+export type Media = File & {
+	absolutePath: string
+	contentType: string
+}
+
+
+/**
  * Files that are sub folders, containing pages, are of type Folder.
  * @type {[type]}
  */
@@ -26,7 +36,6 @@ export type Folder = File & {
 	pages: Page[]
 	folders: Folder[]
 }
-
 
 /**
  * Markdown parser and renderer.
@@ -36,6 +45,10 @@ const md = new Markdown()
 /**
  * Read a directory including subdirectories and building a three object
  * containing all pages and subdirectories. The function is recursive.
+ * TODO: 
+ * - Add support for media (images, video, etc)
+ * - Beautify file names (remove ending, like .md, etc, convert _ to space, etc)
+ * - 
  * @param  {string} dir  The directory to parse
  * @param  {string} name The name of the file "dir" is ponting to
  * @return {Folder}      Return a Folder object containing pages and sub folders
