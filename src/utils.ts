@@ -45,10 +45,10 @@ const md = new Markdown()
 /**
  * Read a directory including subdirectories and building a three object
  * containing all pages and subdirectories. The function is recursive.
- * TODO: 
+ * TODO:
  * - Add support for media (images, video, etc)
  * - Beautify file names (remove ending, like .md, etc, convert _ to space, etc)
- * - 
+ * -
  * @param  {string} dir  The directory to parse
  * @param  {string} name The name of the file "dir" is ponting to
  * @return {Folder}      Return a Folder object containing pages and sub folders
