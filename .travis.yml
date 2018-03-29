@@ -5,8 +5,8 @@ node_js:
 cache: yarn
 
 script:
-  - npm lint
-  - npm test
+  - yarn lint
+  - yarn test
 
 notifications:
   email: false
