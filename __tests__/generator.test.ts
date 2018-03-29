@@ -1,6 +1,6 @@
 import * as path from 'path'
 import { generate } from '../src/generator'
-import { readDir } from '../src/utils'
+import { readDir } from '../src/reader'
 import { ROOT_DIR } from './constants'
 
 it('writes to folder', () => {

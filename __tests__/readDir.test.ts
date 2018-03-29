@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { readDir } from '../src/utils'
+import { readDir } from '../src/reader'
 import { ROOT_DIR } from './constants'
 
 it('parses folder', () => {

@@ -1,7 +1,14 @@
 import * as fs from 'fs'
 import * as handlebars from 'handlebars'
 import * as path from 'path'
-import { Folder, Page } from './utils'
+import { Folder, Page } from './reader'
+import {mkDir} from './utils'
+import * as Markdown from 'markdown-it'
+
+/**
+ * Markdown parser and renderer.
+ */
+const md = new Markdown()
 
 /**
  * Structure given to the Template Rendering engine.
@@ -9,13 +16,13 @@ import { Folder, Page } from './utils'
  */
 type TemplateParameters = {
 	name: string
-	rendered: string,
-	footer: string,
-	footer_rendered: string,
-	description: string,
-	navbar: [
+	rendered: string
+	footer?: string
+	footer_rendered?: string
+	description?: string
+	navbar?: [
 		{
-			name: string,
+			name: string
 			uri: string
 		}
 	]
@@ -26,21 +33,6 @@ const filepath = path.resolve(__dirname, '../template.handlebars')
 const file = fs.readFileSync(filepath).toString()
 const template = handlebars.compile<TemplateParameters>(file)
 
-// Helper function to make output folder
-// TODO: check existanse instead of relying on catching error.
-function mkDir (p: string) {
-	try {
-		fs.mkdirSync(p)
-	} catch (err) {
-		const error: NodeJS.ErrnoException = err
-		if (error.code === 'EEXIST') {
-			// TODO: Remove directory
-		}
-		else {
-			throw error
-		}
-	}
-}
 
 /**
  * Main function to generate a output folder based on a Folder structure.
@@ -70,7 +62,8 @@ function generatePage (page: Page, folder: Folder) {
 		...page,
 		template: template({
 			name: page.name,
-			rendered: page.rendered
+			rendered: md.render(page.content),
+
 		})
 	}
 }
