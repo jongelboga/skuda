@@ -1,6 +1,4 @@
 import * as fs from 'fs'
-import * as path from 'path'
-
 
 // Helper function to make output folder
 // TODO: check existanse instead of relying on catching error.
