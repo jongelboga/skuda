@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import {sanitizeName} from './utils'
 
 /**
  * All files are of type File
@@ -13,7 +14,7 @@ export type File = {
  * Files that are going to be rendered as web pages, are of type Page.
  */
 export type Page = File & {
-	content: string
+	rawContent: string
 }
 
 /**
@@ -24,7 +25,6 @@ export type Media = File & {
 	absolutePath: string
 	contentType: string
 }
-
 
 /**
  * Files that are sub folders, containing pages, are of type Folder.
@@ -50,7 +50,7 @@ export function readDir (dir: string, name?: string): Folder {
 
 	// Read all files in the directory
 	const paths = fs.readdirSync(dir).map<File>(p => ({
-		name: p,
+		name: sanitizeName(p),
 		path: path.join(dir, p) }
 	))
 
@@ -62,9 +62,9 @@ export function readDir (dir: string, name?: string): Folder {
 	// - Page files are read and rendered from MD to HTML.
 	// - Folders are recursively calling this function to make the sub structure.
 	return {
-		name: name || dir.split('/').pop() as string,
+		name: name || sanitizeName(dir),
 		path: dir,
-		pages: pages.map(f => ({ ...f, content: fs.readFileSync(f.path).toString() })),
+		pages: pages.map(f => ({ ...f, rawContent: fs.readFileSync(f.path).toString() })),
 		folders: folders.map(folder => readDir(folder.path, folder.name))
 	}
 }
