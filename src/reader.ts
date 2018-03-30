@@ -1,5 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
+import {sanitizeName} from './utils'
 
 /**
  * All files are of type File
@@ -13,7 +14,7 @@ export type File = {
  * Files that are going to be rendered as web pages, are of type Page.
  */
 export type Page = File & {
-	content: string
+	rawContent: string
 }
 
 /**
@@ -24,7 +25,6 @@ export type Media = File & {
 	absolutePath: string
 	contentType: string
 }
-
 
 /**
  * Files that are sub folders, containing pages, are of type Folder.
@@ -46,25 +46,25 @@ export type Folder = File & {
  * @return {Folder}      Return a Folder object containing pages and sub folders
  */
 export function readDir (dir: string, name?: string): Folder {
-	const isDir = (p: string) => fs.lstatSync(p).isDirectory()
+	const isDir = (p: string) => fs.lstatSync (p).isDirectory ()
 
 	// Read all files in the directory
-	const paths = fs.readdirSync(dir).map<File>(p => ({
-		name: p,
-		path: path.join(dir, p) }
+	const paths = fs.readdirSync (dir).map<File> (p => ({
+		name: sanitizeName (p),
+		path: path.join (dir, p) }
 	))
 
 	// Filter out folders and pages
-	const folders = paths.filter(p => isDir(p.path))
-	const pages = paths.filter(p => !isDir(p.path))
+	const folders = paths.filter (p => isDir (p.path))
+	const pages = paths.filter (p => !isDir (p.path))
 
 	// Construct and return the Folder object.
 	// - Page files are read and rendered from MD to HTML.
 	// - Folders are recursively calling this function to make the sub structure.
 	return {
-		name: name || dir.split('/').pop() as string,
+		name: name || sanitizeName (dir),
 		path: dir,
-		pages: pages.map(f => ({ ...f, content: fs.readFileSync(f.path).toString() })),
-		folders: folders.map(folder => readDir(folder.path, folder.name))
+		pages: pages.map (f => ({ ...f, rawContent: fs.readFileSync (f.path).toString () })),
+		folders: folders.map (folder => readDir (folder.path, folder.name))
 	}
 }
