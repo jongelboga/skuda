@@ -14,15 +14,12 @@ const md = new Markdown()
  * Structure given to the Template Rendering engine.
  * @type {Object}
  */
-type TemplateParameters = {
+
+type ParsedPage = {
 	name: string
-	sections: [
-		{
-			content: string,
-			rendered? : string,
-			template?: string
-		}
-	]
+	properties: Properties
+	rendered?: string
+	sections: ParsedSection[]
 	footer?: string
 	footer_rendered?: string
 	description?: string
@@ -34,14 +31,15 @@ type TemplateParameters = {
 	]
 }
 
+type ParsedSection = {
+	content: String
+	properties: Properties,
+	rendered?: string
+}
+
 type Properties = Map<string, string>;
 
 type TemplateCache = Map<string, Function>;
-
-type ParsedPage = {
-	content: string
-	properties: Properties,
-}
 
 const templateCache: TemplateCache = new Map();
 
@@ -56,11 +54,15 @@ export function generate(outDir: string, folder: Folder): void {
 	// Recursive function for traversing the Folder tree structure and
 	// generate files.
 	function recursiveGen({ pages, folders }: Folder) {
-		pages
-			.map(page => generatePage(page, ogFolder))
-			.forEach(page => {
-				fs.writeFileSync(path.join(outDir, `${page.name}.html`), page.template)
-			})
+
+		// Generate each individual page
+		const parsedPages: ParsedPage[] = pages.map(page => generatePage(page, ogFolder));
+
+		// Write the pages to disk
+		parsedPages.forEach(page => {
+			fs.writeFileSync(path.join(outDir, `${page.name}.html`), page.rendered)
+		})
+
 		folders.map(recursiveGen)
 	}
 
@@ -73,44 +75,52 @@ export function generate(outDir: string, folder: Folder): void {
  * @param page The page to generate
  * @param folder The folder the page belongs to
  */
-function generatePage(page: Page, folder: Folder) {
+function generatePage(page: Page, folder: Folder): ParsedPage {
+
+	// Make a result object where we fill in all generated data
+	const parsedPage: ParsedPage = <ParsedPage>{}
+	parsedPage.properties = new Map();
 
 	// Split content into sections (we use ---- as section delimiter)
-	const sections = page.content.split('----')
-	const parsedSections: ParsedPage[] = []
-	const pageProperties: Properties = new Map()
+	// and parse+render each section
+	const sections = page.content.split('----');
+	parsedPage.sections = sections.map(rawSection => parseSection(rawSection) as ParsedSection);
 
-	console.log("PAGE: %s consists of %d sections", page.name, sections.length)
+	// The Page Properties are set inside a section. 
+	// We need to iterate all of them and move page properties from the section
+	// to the page.
+	parsedPage.sections.forEach(section => findPageProperties(section.properties, parsedPage.properties));
 
-	// Split each section into content and properties
-	sections.forEach(section => {
-	
-	
-		const contentLines: String[] = []
-		const sectionProperties: Properties = new Map();
-		const lines = section.split(/[\r?\n]/);
+	// Now we have alle the individual parts of the page and can render it.
+	parsedPage.rendered = getTemplate('page')(parsedPage),
 
-		// Split lines into properties and content lines
-		lines.forEach(line => {
+	return parsedPage;
+}
 
-			// Is it a property line?
-			if(parseProperty(line, sectionProperties)) return;
+/**
+ * Translate a section from raw text to a ParsedSection object and
+ * render the MD source code with the template defined in the source.
+ * @param rawSection Raw text representation fo a section
+ */
+ function parseSection(rawSection: string): ParsedSection {
 
-			// Not a property, it is content
-			contentLines.push(line);
-		})
+	const contentLines: String[] = []
+	const sectionProperties: Properties = new Map();
+	const lines = rawSection.split(/[\r?\n]/);
 
-		findPageProperties(sectionProperties, pageProperties)
-		parsedSections.push({
-			content: contentLines.join("\n"),
-			properties: sectionProperties
-		})
+	// Split lines into properties and content lines
+	lines.forEach(line => {
+
+		// Is it a property line?
+		if (parseProperty(line, sectionProperties)) return;
+
+		// Not a property, it is content
+		contentLines.push(line);
 	})
 
-	// Render each section
 	return {
-		...page,
-		sections: parsedSections.map(parseSection)
+		content: contentLines.join("\n"),
+		properties: sectionProperties
 	}
 }
 
@@ -140,10 +150,10 @@ function parseProperty(line: string, properties: Properties): boolean {
  * @param sectionProperties The properties found in  a section
  * @param pageProperties The properties object for the page
  */
-function findPageProperties(sectionProperties: Properties, pageProperties: Properties): void{
+function findPageProperties(sectionProperties: Properties, pageProperties: Properties): void {
 
 	sectionProperties.forEach((key, val) => {
-		switch(key){
+		switch (key) {
 			case 'page':
 			case 'description':
 				pageProperties.set(key, val);
@@ -154,17 +164,17 @@ function findPageProperties(sectionProperties: Properties, pageProperties: Prope
 
 }
 
-function renderPage(templateName: string, params: TemplateParameters): string{
+function renderPage(templateName: string, params: TemplateParameters): string {
 	let template = getTemplate(templateName);
 	return template(params);
 
 }
 
-function getTemplate(templateName: string): Function{
+function getTemplate(templateName: string): Function {
 
 	// Check if we already have the template loaded from disk
 	let template = templateCache.get(templateName);
-	if(template) return template;
+	if (template) return template;
 
 	// Reading and compiling the main HTML template used to generate pages
 	const filepath = path.resolve(__dirname, `../${templateName}.handlebars`)

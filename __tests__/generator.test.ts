@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { generate } from '../src/generator'
+import { generate } from '../src/page_generator'
 import { readDir } from '../src/reader'
 import { ROOT_DIR } from './constants'
 
