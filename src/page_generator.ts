@@ -33,6 +33,14 @@ type ParsedPage = {
 export function generate (outDir: string, folder: Folder): void {
 	const ogFolder = folder
 
+	function r(folder: Folder){
+		console.log(folder.name);
+		folder.pages.map(page => console.log(page.name));
+		folder.folders.map(r);
+	}
+	r(folder);
+	// process.exit(255);
+
 	// Recursive function for traversing the Folder tree structure and
 	// generate files.
 	function recursiveGen ({ pages, folders }: Folder) {
