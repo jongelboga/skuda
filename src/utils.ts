@@ -37,14 +37,12 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
 
 	// Check if we already have the template loaded from disk
 	if (templateCache.has (templateName) ) {
-		return templateCache.get (templateName)
+		return templateCache.get (templateName) as HandlebarsTemplateDelegate
 	}
 
 	// Reading and compiling the main HTML template used to generate pages
 	const filepath = path.resolve (__dirname, `../${templateName}.handlebars`)
 	const template = fs.readFileSync (filepath).toString ()
-
-	console.log ('LOADED TEMPLATE %s: \n %s', templateName, template)
 
 	// Compile template to a function and store it in cache
 	const compiled = handlebars.compile (template)

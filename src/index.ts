@@ -1,13 +1,17 @@
-import * as fs from 'fs'
-import * as Markdown from 'markdown-it'
 import * as path from 'path'
-import { Folder, readDir } from './utils'
+import { generate } from './page_generator'
+import { readDir } from './reader'
 
-const rootPath = '../../website/content'
+// TODO:
+// Check for command line parameters
+// Check for default folders site and dist
+// Not use test system files as defaults
 
-const rootDir = path.resolve(__dirname, rootPath)
+// Read folders and get a Folder hierarchy
+const source = path.resolve(__dirname, '../__tests__/testfiles/website')
+const folder = readDir (source)
 
-const tree: Folder = readDir(rootDir)
-
-const md = new Markdown()
+// Generate pages and save to output path
+const out = path.resolve (__dirname, '../__tests__/dist')
+generate ( out, folder)
 
