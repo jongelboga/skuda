@@ -66,7 +66,7 @@ This will be rendered to something like this (simplified) to "dest/index.html":
 ```
 
 
-##The flow of the program:
+## The flow of the program:
 
 The main structure of the program:
 
