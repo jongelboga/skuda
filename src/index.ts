@@ -1,3 +1,7 @@
+/**
+ * This is going to be the main runnable file. Don't do much yet... use "yarn test" instead.
+ */
+
 import * as path from 'path'
 import { generate } from './page_generator'
 import { readDir } from './reader'

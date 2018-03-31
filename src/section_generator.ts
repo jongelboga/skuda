@@ -1,3 +1,7 @@
+/**
+ * This file receives a raw text for a section,
+ * renders the markdown and html template and returns it.
+ */
 import { getTemplate, md, Properties } from './utils'
 
 /**
@@ -6,7 +10,6 @@ import { getTemplate, md, Properties } from './utils'
 export type ParsedSection = {
 	content: string
 	properties: Properties,
-	rendered?: string,
 	template: string,
 	html: string
 }
