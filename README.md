@@ -4,6 +4,14 @@ A static site generator
 
 This is early alpha alpha alpha!!! Do not use yet!
 
+### Installation
+
+* Clone repo
+* Make sure you have TypeScript: ```npm i -g typescript```
+* Make sure you have Yarn: ```npm i -g yarn```
+* Run ```npm i``` in the project folder
+* For now, the only way of running the code, is by running the tests: ```yarn test```
+
 # How it works
 
 Write your pages as Markdown files, let the parser translate and build your HTML site.
@@ -93,12 +101,28 @@ reader.ts              page_generator.ts           section_generator.ts         
 
 * reader.ts reads the whole file hierarchy and returns a file structure
 * page_generator.ts recursively iterates the file structure and generates one page for every MD document it will:
-    * Call section_generator.ts. It will divide the document into sections and render each one
+    * Split it into sections (by divider ----)
+    * Call section_generator.ts fr each section. The section generator will render the Markdown and the HTML template.
     * page_generator will then render the complete page and save it to disk.
 
+To make yourself familiar with the code, read the source files in the following order:
+- [index.ts](src/index.ts)
+- [reader.ts](src/reader.ts)
+- [page_generator.ts](src/page_generator.ts)
+- [section_generator.ts](src/section_generator.ts)
 
-To make yourself familiar with the code, start reading index.ts, then page_generator.ts, then section_generator.ts.
+Shared functionality can be found in [utils.ts](src/utils.ts).
 
-Shared functionality can be found in utils.ts.
+# Todo
 
+* Generate files in proper document structure
+* Handle media files
+    * Rescale images
+    * Reformat videos
+    * Write them to destination.
+* Make a navigation system
+* Make a default layout/css
+* Make more page and section templates
+* Make a "init" system for building a new site strucutre
+* Make Node compile a single binary file for easy installation </sarcasm>
 
