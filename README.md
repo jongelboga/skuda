@@ -124,5 +124,5 @@ Shared functionality can be found in [utils.ts](src/utils.ts).
 * Make a default layout/css
 * Make more page and section templates
 * Make a "init" system for building a new site strucutre
-* Make Node compile a single binary file for easy installation </sarcasm>
+* Make Node compile a single binary file for easy installation ```</sarcasm>```
 
