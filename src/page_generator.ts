@@ -1,12 +1,12 @@
 /**
  * This file is the main parser and renderer.
- * 
+ *
  * It takes a Folder structure, returned from 'reader.ts' and
  * iterates it recursively. For each document, it will split it into
  * sections, call the section_generator.ts, which will render each separate
  * part of the page. When the section generator is done, it
  * will render the complete page and save it.
- * 
+ *
  * TODO: move out file saving and make that into a separate system just
  * like file reading.
  */

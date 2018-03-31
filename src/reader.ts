@@ -1,14 +1,14 @@
 /**
- * This file read the source file structure and makes an hierarchical 
+ * This file read the source file structure and makes an hierarchical
  * structure based on the File, Folder and Page types defined under.
- * 
+ *
  * Since this system is a static site generator, run by the author/admin,
  * not when the user is requesting the page, all file operations are done
  * in sync.
- * 
+ *
  * Main function is generate(folderName). It will start read files from
  * the given folder.
- * 
+ *
  */
 import * as fs from 'fs'
 import * as path from 'path'
