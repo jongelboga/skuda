@@ -19,7 +19,7 @@ export const md = new Markdown()
 
 // Helper function to make output folder
 // TODO: check existanse instead of relying on catching error.
-export function mkDir(p: string) {
+export function mkDir (p: string) {
 	try {
 		fs.mkdirSync(p)
 	} catch (err) {
@@ -33,7 +33,7 @@ export function mkDir(p: string) {
 	}
 }
 
-export function getTemplate(templateName: string): HandlebarsTemplateDelegate {
+export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
 
 	// Check if we already have the template loaded from disk
 	if (templateCache.has(templateName)) {
@@ -56,7 +56,7 @@ export function getTemplate(templateName: string): HandlebarsTemplateDelegate {
  * "/home/marius/Cool presentation.pages" will return "Cool presentation"
  * @param name Filename (can include full path)
  */
-export function sanitizeName(name: string): string {
+export function sanitizeName (name: string): string {
 
 	const result = nameFromPath.exec(name)
 	if (!result) return name

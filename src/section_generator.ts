@@ -38,14 +38,14 @@ export function generateSection (rawSection: string): RenderedSection {
 
 	// Join MD content and render to HTML
 	const content = contentLines.join ('\n')
-	const html = md.render(content);
+	const html = md.render(content)
 
 	// Build a ParsedSection object
 	const parsedSection: ParsedSection =  {
-		content: content,
+		content,
 		properties: sectionProperties,
 		template: sectionProperties.template || 'text',
-		html: html
+		html
 	}
 
 	// Render template and return a RenderedSection
