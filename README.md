@@ -30,7 +30,9 @@ Markdown code saved in "site/index.md":
 ----
 :template=image
 :filename=cosy_plant.jpg
-:title=Get a plant today
+
+Get a plant today
+
 ----
 :template=text
 
@@ -55,7 +57,7 @@ This will be rendered to something like this (simplified) to "dest/index.html":
         <main>
             <section class="template-image">
                 <img src="cosy_plant.jpg" title="Get a plant today">
-                <p>Get a plant today</p>
+                <caption>Get a plant today</caption>
             </section>
             <section class="template-text">
                 <h1>What we believe in</h1>

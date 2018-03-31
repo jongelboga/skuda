@@ -5,23 +5,23 @@ import * as path from 'path'
 
 type TemplateCache = Map<string, HandlebarsTemplateDelegate>
 
-export type Properties = {[s: string]: string}
+export type Properties = { [s: string]: string }
 
 // Internal storage
-const templateCache: TemplateCache = new Map ()
+const templateCache: TemplateCache = new Map()
 
 
 /**
  * Markdown parser and renderer.
  */
-export const md = new Markdown ()
+export const md = new Markdown()
 
 
 // Helper function to make output folder
 // TODO: check existanse instead of relying on catching error.
-export function mkDir (p: string) {
+export function mkDir(p: string) {
 	try {
-		fs.mkdirSync (p)
+		fs.mkdirSync(p)
 	} catch (err) {
 		const error: NodeJS.ErrnoException = err
 		if (error.code === 'EEXIST') {
@@ -33,20 +33,20 @@ export function mkDir (p: string) {
 	}
 }
 
-export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
+export function getTemplate(templateName: string): HandlebarsTemplateDelegate {
 
 	// Check if we already have the template loaded from disk
-	if (templateCache.has (templateName) ) {
-		return templateCache.get (templateName) as HandlebarsTemplateDelegate
+	if (templateCache.has(templateName)) {
+		return templateCache.get(templateName) as HandlebarsTemplateDelegate
 	}
 
 	// Reading and compiling the main HTML template used to generate pages
-	const filepath = path.resolve (__dirname, `../${templateName}.handlebars`)
-	const template = fs.readFileSync (filepath).toString ()
+	const filepath = path.resolve(__dirname, `../${templateName}.handlebars`)
+	const template = fs.readFileSync(filepath).toString()
 
 	// Compile template to a function and store it in cache
-	const compiled = handlebars.compile (template)
-	templateCache.set (templateName, compiled)
+	const compiled = handlebars.compile(template)
+	templateCache.set(templateName, compiled)
 
 	return compiled
 }
@@ -56,11 +56,11 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
  * "/home/marius/Cool presentation.pages" will return "Cool presentation"
  * @param name Filename (can include full path)
  */
-export function sanitizeName (name: string): string {
-	console.log("FROM: ", name)
-   const result = nameFromPath.exec (name)
-   if (!result) return name
-	console.log("TO: ", result[1])
+export function sanitizeName(name: string): string {
+
+	const result = nameFromPath.exec(name)
+	if (!result) return name
+
 	return result[1]
 }
 

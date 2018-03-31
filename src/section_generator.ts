@@ -1,4 +1,4 @@
-import { getTemplate, Properties } from './utils'
+import { getTemplate, md, Properties } from './utils'
 
 /**
  * Type describing each section of the page.
@@ -7,7 +7,12 @@ export type ParsedSection = {
 	content: string
 	properties: Properties,
 	rendered?: string,
-	template: string
+	template: string,
+	html: string
+}
+
+export type RenderedSection = ParsedSection & {
+	rendered: string
 }
 
 /**
@@ -15,7 +20,7 @@ export type ParsedSection = {
  * render the MD source code with the template defined in the source.
  * @param rawSection Raw text representation fo a section
  */
-export function generateSection (rawSection: string): ParsedSection {
+export function generateSection (rawSection: string): RenderedSection {
 
 	const contentLines: string[] = []
 	const sectionProperties: Properties = {}
@@ -31,11 +36,22 @@ export function generateSection (rawSection: string): ParsedSection {
 		contentLines.push (line)
 	})
 
-	// Return a ParsedSection object
-	return {
-		content: contentLines.join ('\n'),
+	// Join MD content and render to HTML
+	const content = contentLines.join ('\n')
+	const html = md.render(content);
+
+	// Build a ParsedSection object
+	const parsedSection: ParsedSection =  {
+		content: content,
 		properties: sectionProperties,
-		template: sectionProperties.template || 'text'
+		template: sectionProperties.template || 'text',
+		html: html
+	}
+
+	// Render template and return a RenderedSection
+	return {
+		...parsedSection,
+		rendered: getTemplate(parsedSection.template)(parsedSection)
 	}
 }
 
