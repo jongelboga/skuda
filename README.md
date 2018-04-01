@@ -115,6 +115,7 @@ reader.ts                 generator.ts              page_generator.ts           
     * Split it into sections (by divider ----)
     * Call section_generator.ts fr each section. The section generator will render the Markdown and the HTML template.
     * page_generator will then render the complete page and save it to disk.
+* writer.ts writes a page to disk.
 
 To make yourself familiar with the code, read the source files in the following order:
 - [index.ts](src/index.ts)
@@ -122,6 +123,7 @@ To make yourself familiar with the code, read the source files in the following 
 - [generator.ts](src/generator.ts)
 - [page_generator.ts](src/page_generator.ts)
 - [section_generator.ts](src/section_generator.ts)
+- [writer.ts](src/writer.ts)
 
 Shared functionality can be found in [utils.ts](src/utils.ts).
 
