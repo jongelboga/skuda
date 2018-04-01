@@ -15,7 +15,7 @@ import {mkDir} from './utils'
  */
 export default function writer (rootDir: string) {
 
-	mkDir (rootDir)
+	mkDir(rootDir)
 
 	/*
      * Write a rendered page to disk.
@@ -27,7 +27,7 @@ export default function writer (rootDir: string) {
 		// TODO: outdir should be rootDir + current dir
 		const outDir = rootDir
 
-		fs.writeFileSync (path.join (outDir, `${renderedPage.name}.html`), renderedPage.rendered)
+		fs.writeFileSync(path.join(outDir, `${renderedPage.name}.html`), renderedPage.rendered)
 	}
 
 	return writePage

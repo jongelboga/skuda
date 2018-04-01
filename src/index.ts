@@ -3,7 +3,7 @@
  */
 
 import * as path from 'path'
-import { generate } from './page_generator'
+import { generate } from './generator'
 import { readDir } from './reader'
 
 // TODO:
@@ -13,9 +13,9 @@ import { readDir } from './reader'
 
 // Read folders and get a Folder hierarchy
 const source = path.resolve(__dirname, '../__tests__/testfiles/website')
-const folder = readDir (source)
+const folder = readDir(source)
 
 // Generate pages and save to output path
-const out = path.resolve (__dirname, '../__tests__/dist')
-generate ( out, folder)
+const out = path.resolve(__dirname, '../__tests__/dist')
+generate(out, folder)
 

@@ -47,7 +47,7 @@ export function generatePage (page: Page, folder: Folder): RenderedPage {
 
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
-	const sections = page.rawContent.split ('----')
+	const sections = page.rawContent.split('----')
 
 	// Make a result object where we fill in all generated data
 	const parsedPage: ParsedPage = {
@@ -55,20 +55,20 @@ export function generatePage (page: Page, folder: Folder): RenderedPage {
 		properties: {
 			template: 'page'
 		},
-		sections: sections.map (rawSection => generateSection (rawSection) as RenderedSection),
+		sections: sections.map(rawSection => generateSection(rawSection) as RenderedSection),
 		folder
 	} as ParsedPage
 
 	// The Page Properties are set inside a section.
 	// We need to iterate all of them and move page properties from the section
 	// to the page.
-	parsedPage.sections.forEach (section => findPageProperties (section.properties, parsedPage.properties))
+	parsedPage.sections.forEach(section => findPageProperties(section.properties, parsedPage.properties))
 
 	// Set the page's template name, if set in properties
 	parsedPage.properties.template = parsedPage.properties.page || parsedPage.properties.template
 
 	// Now we have all the individual parts of the page and can render it.
-	const renderedPage: RenderedPage = renderPage (parsedPage)
+	const renderedPage: RenderedPage = renderPage(parsedPage)
 
 	return renderedPage
 }
@@ -87,7 +87,7 @@ function findPageProperties (sectionProperties: Properties, pageProperties: Prop
 		const val = sectionProperties[key]
 		if (!val) continue
 
-		switch ( key ) {
+		switch (key) {
 			case 'page':
 			case 'description':
 				pageProperties[key] = val
@@ -100,9 +100,9 @@ function findPageProperties (sectionProperties: Properties, pageProperties: Prop
  * @param params
  */
 function renderPage (parsedPage: ParsedPage): RenderedPage {
-	const template = getTemplate (parsedPage.properties.template)
+	const template = getTemplate(parsedPage.properties.template)
 	return {
 		...parsedPage,
-		rendered: template (parsedPage)
+		rendered: template(parsedPage)
 	}
 }
