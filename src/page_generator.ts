@@ -52,13 +52,13 @@ export function generatePage (page: Page, folder: Folder): RenderedPage {
 	// Make a result object where we fill in all generated data
 	const parsedPage: ParsedPage = {
 		name: page.name,
-		properties: {},
+		properties: {
+			template: 'page'
+		},
 		sections: sections.map (rawSection => generateSection (rawSection) as RenderedSection),
-		folder,
-		template: 'page'
+		folder
 	} as ParsedPage
 
-	
 	// The Page Properties are set inside a section.
 	// We need to iterate all of them and move page properties from the section
 	// to the page.
