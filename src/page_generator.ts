@@ -1,8 +1,7 @@
 /**
- * This file is the main parser and renderer.
+ * This file is the main page parser.
  *
- * It takes a Folder structure, returned from 'reader.ts' and
- * iterates it recursively. For each document, it will split it into
+ * It takes in a raw page and creates a ParsedPage object. It will split it into
  * sections, call the section_generator.ts, which will render each separate
  * part of the page. When the section generator is done, it
  * will render the complete page and save it.
@@ -10,11 +9,9 @@
  * TODO: move out file saving and make that into a separate system just
  * like file reading.
  */
-import * as fs from 'fs'
-import * as path from 'path'
 import { Folder, Page } from './reader'
 import { generateSection, RenderedSection } from './section_generator'
-import { getTemplate, mkDir, Properties } from './utils'
+import { getTemplate, Properties } from './utils'
 
 /**
  * Structure describing a parsed page, ready for rendering and then saving.
@@ -36,36 +33,8 @@ type ParsedPage = {
 	]
 }
 
-type RenderedPage = ParsedPage & {
+export type RenderedPage = ParsedPage & {
 	rendered: string
-}
-
-/**
- * Main function to generate a output folder based on a Folder structure.
- * @param {string} outDir Destination folder
- * @param {Folder} folder Folder object.
- */
-export function generate (outDir: string, folder: Folder): void {
-	const ogFolder = folder
-
-	// Recursive function for traversing the Folder tree structure and
-	// generate files.
-	function recursiveGen ({ pages, folders }: Folder) {
-
-		// Generate each individual page
-		const renderedPages: RenderedPage[] = pages.map (page => generatePage (page, ogFolder))
-
-		// Write the pages to disk
-		renderedPages.forEach (renderedPage => {
-			fs.writeFileSync (path.join (outDir, `${renderedPage.name}.html`), renderedPage.rendered)
-		})
-
-		// Recuresively generate all sub folders
-		folders.map (recursiveGen)
-	}
-
-	mkDir (outDir)
-	recursiveGen (folder)
 }
 
 /**
@@ -73,7 +42,7 @@ export function generate (outDir: string, folder: Folder): void {
  * @param page The page to generate
  * @param folder The folder the page belongs to
  */
-function generatePage (page: Page, folder: Folder): RenderedPage {
+export function generatePage (page: Page, folder: Folder): RenderedPage {
 
 	// Make a result object where we fill in all generated data
 	const parsedPage: ParsedPage = {name: page.name} as ParsedPage
@@ -92,7 +61,7 @@ function generatePage (page: Page, folder: Folder): RenderedPage {
 	// Set the page's template name. User can set it with the parameter 'page'. If not set, we use a default.
 	parsedPage.properties.template = parsedPage.properties.page || 'page'
 
-	// Now we have alle the individual parts of the page and can render it.
+	// Now we have all the individual parts of the page and can render it.
 	const renderedPage: RenderedPage = renderPage (parsedPage)
 
 	return renderedPage
@@ -106,7 +75,7 @@ function generatePage (page: Page, folder: Folder): RenderedPage {
  */
 function findPageProperties (sectionProperties: Properties, pageProperties: Properties): void {
 
-	// Iterating the properties object (the old fasioned way, since the type restrict usage)
+	// Iterating the properties object (the old fashioned way, since the type restrict usage)
 	for (const key in sectionProperties) {
 		if (!key) continue
 		const val = sectionProperties[key]
