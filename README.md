@@ -90,23 +90,28 @@ This will be rendered to something like this (simplified) to "dest/index.html":
 The main structure of the parser program:
 
 ```
-reader.ts              page_generator.ts           section_generator.ts             Filesystem
-    |                          |                            |                           |
-    | <- Reads file hierarchy--|----------------------------|---------------------------|
-    |                          |                            |                           |
-    | --- Folder tree -------->|                            |                           |
-    |                          | --- raw page text -------->|                           |
-    |                          |  (repeated for every page) |                           |
-    |                          |                            |                           |
-    |                          |<--------Section list ----- |                           |
-    |                          |                            |                           |
-    |                          | -- Writes file hierarcy ---|-------------------------->|
-    |                          |                            |                           |
-    |                          |                            |                           |
+reader.ts                 generator.ts              page_generator.ts           section_generator.ts             Filesystem
+    |                          |                            |                            |                           |
+    | <- Reads file hierarchy--|----------------------------|----------------------------|---------------------------|
+    |                          |                            |                            |                           |
+    | --- Folder tree -------->|                            |                            |                           |
+    |                          |For each page:              |                            |                           |
+    |                          |------ Page object--------->|                            |                           |
+    |                          |                            | For each section:          |                           |
+    |                          |                            | --- raw section text ----->|                           |
+    |                          |                            |                            |                           |
+    |                          |                            |<--------Section object --- |                           |
+    |                          |                            |                            |                           |
+    |                          |<----RenderedPage object ---|                            |                           |
+    |                          |                            |                            |                           |
+    |                          |--- Writes file hierarcy ---|----------------------------|-------------------------->|
+    |                          |                            |                            |                           |
+    |                          |                            |                            |                           |
 ```
 
 * reader.ts reads the whole file hierarchy and returns a file structure
-* page_generator.ts recursively iterates the file structure and generates one page for every MD document it will:
+* generator.ts recursively iterates the file structure and and calls page_generator for each page.
+* page_generator.ts generates one page. It will:
     * Split it into sections (by divider ----)
     * Call section_generator.ts fr each section. The section generator will render the Markdown and the HTML template.
     * page_generator will then render the complete page and save it to disk.
@@ -114,6 +119,7 @@ reader.ts              page_generator.ts           section_generator.ts         
 To make yourself familiar with the code, read the source files in the following order:
 - [index.ts](src/index.ts)
 - [reader.ts](src/reader.ts)
+- [generator.ts](src/generator.ts)
 - [page_generator.ts](src/page_generator.ts)
 - [section_generator.ts](src/section_generator.ts)
 
