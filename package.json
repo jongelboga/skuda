@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "tslint {__tests__,src}/**/*.{ts,tsx}",
     "test": "jest",
+    "test:cover": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "compile": "rm -rf out; mkdir -p out; tsc --outDir out src/index.ts --target ES6 --module commonjs"
   },
   "jest": {
@@ -18,7 +19,7 @@
       "js",
       "json"
     ],
-    "testRegex": "(\/__tests__\/.+(test|spec)\\.(ts|tsx|js))$"
+    "testRegex": "(/__tests__/.+(test|spec)\\.(ts|tsx|js))$"
   },
   "author": "jongelboga",
   "license": "MIT",
@@ -31,6 +32,7 @@
     "@types/jest": "^22.2.2",
     "@types/markdown-it": "^0.0.4",
     "@types/node": "^9.6.0",
+    "coveralls": "^3.0.0",
     "jest": "^22.4.3",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
