@@ -30,7 +30,8 @@ type ParsedPage = {
 			name: string
 			uri: string
 		}
-	]
+	],
+	folder: Folder
 }
 
 export type RenderedPage = ParsedPage & {
@@ -44,22 +45,27 @@ export type RenderedPage = ParsedPage & {
  */
 export function generatePage (page: Page, folder: Folder): RenderedPage {
 
-	// Make a result object where we fill in all generated data
-	const parsedPage: ParsedPage = {name: page.name} as ParsedPage
-	parsedPage.properties = {}
-
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
 	const sections = page.rawContent.split ('----')
-	parsedPage.sections = sections.map (rawSection => generateSection (rawSection) as RenderedSection)
 
+	// Make a result object where we fill in all generated data
+	const parsedPage: ParsedPage = {
+		name: page.name,
+		properties: {},
+		sections: sections.map (rawSection => generateSection (rawSection) as RenderedSection),
+		folder,
+		template: 'page'
+	} as ParsedPage
+
+	
 	// The Page Properties are set inside a section.
 	// We need to iterate all of them and move page properties from the section
 	// to the page.
 	parsedPage.sections.forEach (section => findPageProperties (section.properties, parsedPage.properties))
 
-	// Set the page's template name. User can set it with the parameter 'page'. If not set, we use a default.
-	parsedPage.properties.template = parsedPage.properties.page || 'page'
+	// Set the page's template name, if set in properties
+	parsedPage.properties.template = parsedPage.properties.page || parsedPage.properties.template
 
 	// Now we have all the individual parts of the page and can render it.
 	const renderedPage: RenderedPage = renderPage (parsedPage)
