@@ -47,6 +47,8 @@
             "never"
         ],
         "space-before-function-paren": [true, "always"],
+        "space-in-parens": [true, "never"],
+        "ter-func-call-spacing": [true, "never"],
         "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
         "triple-equals": [
             true
