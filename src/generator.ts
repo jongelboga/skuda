@@ -8,8 +8,8 @@
  * TODO: move out file saving and make that into a separate system just
  * like file reading.
  */
-import {generatePage, ParsedPage, RenderedPage} from './page_generator'
-import { Folder, Page } from './reader'
+import { generatePage, RenderedPage } from './page_generator'
+import { Folder } from './reader'
 import writer from './writer'
 
 /**
@@ -27,14 +27,14 @@ export function generate (outDir: string, folder: Folder): void {
 	function recursiveGen ({ pages, folders }: Folder) {
 
 		// Generate each individual page
-		const renderedPages: RenderedPage[] = pages.map (page => generatePage (page, ogFolder))
+		const renderedPages: RenderedPage[] = pages.map(page => generatePage(page, ogFolder))
 
 		// Write the pages to disk
-		renderedPages.forEach (writePage)
+		renderedPages.forEach(writePage)
 
 		// Recuresively generate all sub folders
-		folders.map (recursiveGen)
+		folders.map(recursiveGen)
 	}
 
-	recursiveGen (folder)
+	recursiveGen(folder)
 }

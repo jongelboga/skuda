@@ -27,20 +27,20 @@ export function generateSection (rawSection: string): RenderedSection {
 
 	const contentLines: string[] = []
 	const sectionProperties: Properties = {}
-	const lines = rawSection.split (/[\r?\n]/)
+	const lines = rawSection.split(/[\r?\n]/)
 
 	// Split lines into properties and content lines
-	lines.forEach (line => {
+	lines.forEach(line => {
 
 		// Is it a property line?
-		if (parseProperty (line, sectionProperties)) return
+		if (parseProperty(line, sectionProperties)) return
 
 		// No, it is not a property. Then it must be content.
-		contentLines.push (line)
+		contentLines.push(line)
 	})
 
 	// Join MD content and render to HTML
-	const content = contentLines.join ('\n')
+	const content = contentLines.join('\n')
 	const html = md.render(content)
 
 	// Build a ParsedSection object
@@ -67,14 +67,14 @@ export function generateSection (rawSection: string): RenderedSection {
 function parseProperty (line: string, properties: Properties): boolean {
 
 	// Check if the line is a property
-	if (!line.startsWith (':')) return false
-	if (line.indexOf ('=') === -1) return false
+	if (!line.startsWith(':')) return false
+	if (line.indexOf('=') === -1) return false
 
 	// Split the property into key and value
-	const tokens: string[] = line.substring (1).split ('=')
+	const tokens: string[] = line.substring(1).split('=')
 	if (tokens.length !== 2) return false
-	const key: string = tokens[0].trim ()
-	const val: string = tokens[1].trim ()
+	const key: string = tokens[0].trim()
+	const val: string = tokens[1].trim()
 
 	// Set properties to property table
 	properties[key] = val
