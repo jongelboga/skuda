@@ -57,7 +57,7 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
  * @param name Filename (can include full path)
  */
 export function sanitizeName (name: string): string {
-	return path
+	return path.win32
 		.parse(name).name
 		.split(' ')
 		.map(s => s[0].toLocaleUpperCase() + s.slice(1))
