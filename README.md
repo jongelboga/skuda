@@ -6,7 +6,7 @@
 [![NSP Status](https://nodesecurity.io/orgs/jongelboga/projects/908e9fee-29bd-48b0-891b-5161b2184b48/badge)](https://nodesecurity.io/orgs/jongelboga/projects/908e9fee-29bd-48b0-891b-5161b2184b48)
 ----
 
-A static site generator
+A static site generator.
 
 This is early alpha alpha alpha!!! Do not use yet!
 
@@ -16,7 +16,7 @@ This is early alpha alpha alpha!!! Do not use yet!
 * Make sure you have TypeScript: ```npm i -g typescript```
 * Make sure you have Yarn: ```npm i -g yarn```
 * Run ```npm i``` in the project folder
-* For now, the only way of running the code, is by running the tests: ```yarn test```
+* For now, the only way of running the code, is by running the tests: ```npm test```
 
 # How it works
 
