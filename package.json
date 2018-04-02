@@ -9,6 +9,11 @@
     "test:cover": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "build": "node scripts/clean.js && tsc"
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn lint && yarn test && yarn build"
+    }
+  },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
@@ -35,6 +40,7 @@
     "@types/markdown-it": "^0.0.4",
     "@types/node": "^9.6.0",
     "coveralls": "^3.0.0",
+    "husky": "^0.14.3",
     "jest": "^22.4.3",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
