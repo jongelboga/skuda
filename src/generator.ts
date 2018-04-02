@@ -17,17 +17,17 @@ import writer from './writer'
  * @param {string} outDir Destination folder
  * @param {Folder} folder Folder object.
  */
-export function generate (outDir: string, folder: Folder): void {
+export async function generate (outDir: string, folder: Folder): Promise<void> {
 
 	const writePage = writer(outDir)
 	const ogFolder = folder
 
 	// Recursive function for traversing the Folder tree structure and
 	// generate files.
-	function recursiveGen ({ pages, folders }: Folder) {
+	async function recursiveGen ({ pages, folders }: Folder) {
 
 		// Generate each individual page
-		const renderedPages: RenderedPage[] = pages.map(page => generatePage(page, ogFolder))
+		const renderedPages: RenderedPage[] = await Promise.all(pages.map(page => generatePage(page, ogFolder)))
 
 		// Write the pages to disk
 		renderedPages.forEach(writePage)
