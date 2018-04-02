@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import * as fs from 'fs-extra'
 import * as handlebars from 'handlebars'
 import * as Markdown from 'markdown-it'
 import * as path from 'path'
@@ -57,12 +57,9 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
  * @param name Filename (can include full path)
  */
 export function sanitizeName (name: string): string {
-
-	const result = nameFromPath.exec(name)
-	if (!result) return name
-
-	return result[1]
+	return path.win32
+		.parse(name).name
+		.split(' ')
+		.map(s => s[0].toLocaleUpperCase() + s.slice(1))
+		.join(' ')
 }
-
-// Precompiled Regex
-const nameFromPath = /([^./]+)[.]*.*?$/

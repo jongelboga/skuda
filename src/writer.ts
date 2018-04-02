@@ -5,8 +5,8 @@
  */
 import * as fs from 'fs'
 import * as path from 'path'
-import {RenderedPage} from './page_generator'
-import {mkDir} from './utils'
+import { RenderedPage } from './page_generator'
+import { mkDir } from './utils'
 
 /**
  * Make a new writer

@@ -13,9 +13,8 @@ import { readDir } from './reader'
 
 // Read folders and get a Folder hierarchy
 const source = path.resolve(__dirname, '../__tests__/testfiles/website')
-const folder = readDir(source)
 
-// Generate pages and save to output path
-const out = path.resolve(__dirname, '../__tests__/dist')
-generate(out, folder)
-
+readDir(source).then(folder => generate(
+	path.resolve(__dirname, '../__tests__/dist'),
+	folder
+))
