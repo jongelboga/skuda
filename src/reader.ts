@@ -12,7 +12,7 @@
  */
 import * as fs from 'fs'
 import * as path from 'path'
-import {sanitizeName} from './utils'
+import { sanitizeName } from './utils'
 
 /**
  * All files are of type File
