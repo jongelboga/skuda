@@ -18,19 +18,9 @@ export const md = new Markdown()
 
 
 // Helper function to make output folder
-// TODO: check existanse instead of relying on catching error.
-export function mkDir (p: string) {
-	try {
-		fs.mkdirSync(p)
-	} catch (err) {
-		const error: NodeJS.ErrnoException = err
-		if (error.code === 'EEXIST') {
-			// TODO: Remove directory
-		}
-		else {
-			throw error
-		}
-	}
+export function mkDir (folderName: string) {
+		if (fs.existsSync(folderName)) return
+		fs.mkdirSync(folderName)
 }
 
 export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
@@ -41,7 +31,7 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
 	}
 
 	// Reading and compiling the main HTML template used to generate pages
-	const filepath = path.resolve(__dirname, `../${templateName}.handlebars`)
+	const filepath = path.resolve(__dirname, `../templates/${templateName}.handlebars`)
 	const template = fs.readFileSync(filepath).toString()
 
 	// Compile template to a function and store it in cache
