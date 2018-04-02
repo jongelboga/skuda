@@ -57,12 +57,9 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
  * @param name Filename (can include full path)
  */
 export function sanitizeName (name: string): string {
-
-	const result = nameFromPath.exec(name)
-	if (!result) return name
-
-	return result[1]
+	return path
+		.parse(name).name
+		.split(' ')
+		.map(s => s[0].toLocaleUpperCase() + s.slice(1))
+		.join(' ')
 }
-
-// Precompiled Regex
-const nameFromPath = /([^./]+)[.]*.*?$/

@@ -10,9 +10,10 @@
  * the given folder.
  *
  */
-import * as fs from 'fs'
+import * as fs from 'fs-extra'
 import * as path from 'path'
 import { sanitizeName } from './utils'
+
 
 /**
  * All files are of type File
@@ -20,13 +21,7 @@ import { sanitizeName } from './utils'
 export type File = {
 	name: string
 	path: string
-}
-
-/**
- * Files that are going to be rendered as web pages, are of type Page.
- */
-export type Page = File & {
-	rawContent: string
+	uri: string
 }
 
 /**
@@ -53,30 +48,33 @@ export type Folder = File & {
  * - Add support for media (images, video, etc)
  * - Beautify file names (remove ending, like .md, etc, convert _ to space, etc)
  * -
- * @param  {string} dir  The directory to parse
- * @param  {string} name The name of the file "dir" is ponting to
+ * @param  {string} directory  The directory to parse
+ * @param  {string} sitename   The name of the website. If omitted It will use the name of the folder
  * @return {Folder}      Return a Folder object containing pages and sub folders
  */
-export function readDir (dir: string, name?: string): Folder {
-	const isDir = (p: string) => fs.lstatSync(p).isDirectory()
+export async function readDir (directory: string, sitename?: string): Promise<Folder> {
+	async function _readDir (dir: string, name?: string): Promise<Folder> {
+		const isDir = (p: string) => fs.lstatSync(p).isDirectory()
 
-	// Read all files in the directory
-	const paths = fs.readdirSync(dir).map<File>(p => ({
-		name: sanitizeName(p),
-		path: path.join(dir, p) }
-	))
+		// Read all files in the directory
+		const paths = (await fs.readdir(dir)).map(p => ({
+			name: sanitizeName(p),
+			path: path.join(dir, p),
+			uri: path.join(path.relative(directory, dir), p)
+		}))
 
-	// Filter out folders and pages
-	const folders = paths.filter(p => isDir(p.path))
-	const pages = paths.filter(p => !isDir(p.path))
-
-	// Construct and return the Folder object.
-	// - Page files are read and rendered from MD to HTML.
-	// - Folders are recursively calling this function to make the sub structure.
-	return {
-		name: name || sanitizeName(dir),
-		path: dir,
-		pages: pages.map(f => ({ ...f, rawContent: fs.readFileSync(f.path).toString() })),
-		folders: folders.map(folder => readDir(folder.path, folder.name))
+		// Construct and return the Folder object.
+		// - Folders are recursively calling this function to make the sub structure.
+		return {
+			name: name || sanitizeName(dir),
+			path: dir,
+			uri:  path.relative(directory, dir),
+			pages: paths.filter(p => !isDir(p.path)),
+			folders: await Promise.all(paths
+				.filter(p => isDir(p.path))
+				.map(folder => _readDir(folder.path, folder.name)))
+		}
 	}
+
+	return _readDir(directory, sitename)
 }

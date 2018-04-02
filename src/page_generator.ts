@@ -9,6 +9,7 @@
  * TODO: move out file saving and make that into a separate system just
  * like file reading.
  */
+import * as fs from 'fs-extra'
 import { Folder, Page } from './reader'
 import { generateSection, RenderedSection } from './section_generator'
 import { getTemplate, Properties } from './utils'
@@ -43,11 +44,11 @@ export type RenderedPage = ParsedPage & {
  * @param page The page to generate
  * @param folder The folder the page belongs to
  */
-export function generatePage (page: Page, folder: Folder): RenderedPage {
-
+export async function generatePage (page: Page, folder: Folder): Promise<RenderedPage> {
+	const rawContent = await fs.readFile(page.path)
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
-	const sections = page.rawContent.split('----')
+	const sections = rawContent.toString().split('----')
 
 	// Make a result object where we fill in all generated data
 	const parsedPage: ParsedPage = {
