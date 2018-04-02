@@ -18,7 +18,7 @@ import { sanitizeName } from './utils'
 /**
  * All files are of type File
  */
-export type File = {
+export interface File {
 	name: string
 	path: string
 	uri: string
@@ -28,7 +28,7 @@ export type File = {
  * Media files. When generating the structure, the generator may need
  * to rescale and convert files to different formats.
  */
-export type Media = File & {
+export interface Media extends File {
 	absolutePath: string
 	contentType: string
 }
@@ -36,8 +36,8 @@ export type Media = File & {
 /**
  * Files that are sub folders, containing pages, are of type Folder.
  */
-export type Folder = File & {
-	pages: Page[]
+export interface Folder extends File  {
+	pages: File[]
 	folders: Folder[]
 }
 

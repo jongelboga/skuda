@@ -1,4 +1,4 @@
-import * as fs from 'fs'
+import * as fs from 'fs-extra'
 import * as handlebars from 'handlebars'
 import * as Markdown from 'markdown-it'
 import * as path from 'path'
