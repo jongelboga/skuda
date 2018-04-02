@@ -36,7 +36,7 @@ export interface Media extends File {
 /**
  * Files that are sub folders, containing pages, are of type Folder.
  */
-export interface Folder extends File  {
+export interface Folder extends File {
 	pages: File[]
 	folders: Folder[]
 }
