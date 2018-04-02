@@ -26,13 +26,9 @@ type ParsedPage = {
 	footer?: string
 	footer_rendered?: string
 	description?: string
-	navbar?: [
-		{
-			name: string
-			uri: string
-		}
-	],
 	folder: Folder
+	rootFolder: Folder,
+	uri: string
 }
 
 export type RenderedPage = ParsedPage & {
@@ -43,8 +39,9 @@ export type RenderedPage = ParsedPage & {
  * Generate and render a page.
  * @param page The page to generate
  * @param folder The folder the page belongs to
+ * @param rootFolder The root of the web site
  */
-export async function generatePage (page: File, folder: Folder): Promise<RenderedPage> {
+export async function generatePage (page: File, folder: Folder, rootFolder: Folder): Promise<RenderedPage> {
 	const rawContent = await fs.readFile(page.path)
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
@@ -57,7 +54,9 @@ export async function generatePage (page: File, folder: Folder): Promise<Rendere
 			template: 'page'
 		},
 		sections: sections.map(rawSection => generateSection(rawSection) as RenderedSection),
-		folder
+		folder,
+		rootFolder,
+		uri: page.uri
 	} as ParsedPage
 
 	// The Page Properties are set inside a section.

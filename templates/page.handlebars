@@ -6,13 +6,13 @@
 		{{#description}}<description>{{description}}</description>{{/description}}
   </head>
   <body>
-	{{#navbar}}
+	{{#rootFolder.folders}}
 	<nav>
 		<ul>
-			<a href="{{uri}}">{{name}}</a>
+			<a href="{{/uri}}">{{name}}</a>
 		</ul>
 	</nav>>
-	{{/navbar}}
+	{{/rootFolder.folders}}
 	<main>
 		{{#sections}}
 			{{{rendered}}}
