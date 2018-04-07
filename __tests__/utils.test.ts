@@ -1,7 +1,7 @@
 import * as path from 'path'
 import { sanitizeName } from '../src/utils'
 
-describe(sanitizeName.name, () => {
+describe(sanitizeName, () => {
 	it('returns name', () => {
 		const result = sanitizeName(`/home/documents/Cool presentation.pages`)
 		expect(result).toEqual('Cool Presentation')
