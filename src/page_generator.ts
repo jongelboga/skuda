@@ -56,22 +56,23 @@ export async function generatePage (page: File, folder: Folder): Promise<Rendere
 		properties: {
 			template: 'page'
 		},
-		sections: sections.map(rawSection => generateSection(rawSection) as RenderedSection),
+		sections: sections.map(rawSection => generateSection(rawSection)),
 		folder
-	} as ParsedPage
+	}
 
 	// The Page Properties are set inside a section.
 	// We need to iterate all of them and move page properties from the section
 	// to the page.
-	parsedPage.sections.forEach(section => findPageProperties(section.properties, parsedPage.properties))
+	parsedPage.sections = parsedPage.sections.map(section => ({
+		...section,
+		properties: findPageProperties(section.properties, parsedPage.properties)
+	}))
 
 	// Set the page's template name, if set in properties
 	parsedPage.properties.template = parsedPage.properties.page || parsedPage.properties.template
 
 	// Now we have all the individual parts of the page and can render it.
-	const renderedPage: RenderedPage = renderPage(parsedPage)
-
-	return renderedPage
+	return renderPage(parsedPage)
 }
 
 /**
@@ -80,20 +81,15 @@ export async function generatePage (page: File, folder: Folder): Promise<Rendere
  * @param sectionProperties The properties found in  a section
  * @param pageProperties The properties object for the page
  */
-function findPageProperties (sectionProperties: Properties, pageProperties: Properties): void {
-
-	// Iterating the properties object (the old fashioned way, since the type restrict usage)
-	for (const key in sectionProperties) {
-		if (!key) continue
-		const val = sectionProperties[key]
-		if (!val) continue
-
-		switch (key) {
-			case 'page':
-			case 'description':
-				pageProperties[key] = val
-		}
-	}
+export function findPageProperties (sectionProperties: Properties, pageProperties: Properties): Properties {
+	const validValues = ['page', 'description']
+	return Object
+		.entries(sectionProperties)
+		.filter(([key, value]) => validValues.includes(key) && value)
+		.reduce(
+			(a, [key, value]) => Object.defineProperty(a, key, { value, enumerable: true }),
+			{ ...pageProperties }
+		)
 }
 
 /**
