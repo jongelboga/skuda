@@ -41,6 +41,59 @@ export interface Folder extends File {
 	folders: Folder[]
 }
 
+export interface SimpleFile {
+	path: string
+}
+export interface SimpleFolder extends SimpleFile {
+	files: string[]
+	folders: SimpleFolder[]
+}
+
+const isDir = (p: string) => fs.lstatSync(p).isDirectory()
+
+export async function getPaths (directory: string): Promise<SimpleFolder> {
+	const paths = (await fs
+		.readdir(directory))
+		.map(p => path.join(directory, p))
+
+	return {
+		path: directory,
+		files: paths.filter(p => !isDir(p)),
+		folders: await Promise.all(paths
+			.filter(isDir)
+			.map(getPaths))
+	}
+}
+
+/**
+ * Read a directory including subdirectories and building a three object
+ * containing all pages and subdirectories. The function is recursive.
+ * TODO:
+ * - Add support for media (images, video, etc)
+ * - Beautify file names (remove ending, like .md, etc, convert _ to space, etc)
+ * -
+ * @param  {string} directory  The directory to parse
+ * @return {Folder}      Return a Folder object containing pages and sub folders
+ */
+export function parseDir (rootFolder: SimpleFolder): Folder {
+	function _parseDir (folder: SimpleFolder): Folder {
+		return {
+			name: sanitizeName(folder.path),
+			path: folder.path,
+			uri: path.relative(rootFolder.path, folder.path),
+			pages: folder.files
+				.map(file => ({
+					name: sanitizeName(file),
+					path: file,
+					uri: path.relative(rootFolder.path, file)
+				})),
+			folders: folder.folders.map(_parseDir)
+		}
+	}
+
+	return _parseDir(rootFolder)
+}
+
 /**
  * Read a directory including subdirectories and building a three object
  * containing all pages and subdirectories. The function is recursive.
@@ -53,28 +106,9 @@ export interface Folder extends File {
  * @return {Folder}      Return a Folder object containing pages and sub folders
  */
 export async function readDir (directory: string, sitename?: string): Promise<Folder> {
-	async function _readDir (dir: string, name?: string): Promise<Folder> {
-		const isDir = (p: string) => fs.lstatSync(p).isDirectory()
-
-		// Read all files in the directory
-		const paths = (await fs.readdir(dir)).map(p => ({
-			name: sanitizeName(p),
-			path: path.join(dir, p),
-			uri: path.join(path.relative(directory, dir), p)
-		}))
-
-		// Construct and return the Folder object.
-		// - Folders are recursively calling this function to make the sub structure.
-		return {
-			name: name || sanitizeName(dir),
-			path: dir,
-			uri:  path.relative(directory, dir),
-			pages: paths.filter(p => !isDir(p.path)),
-			folders: await Promise.all(paths
-				.filter(p => isDir(p.path))
-				.map(folder => _readDir(folder.path, folder.name)))
-		}
-	}
-
-	return _readDir(directory, sitename)
+	const paths = await getPaths(directory)
+	const folder = parseDir(paths)
+	if (sitename)
+		folder.name = sitename
+	return folder
 }
