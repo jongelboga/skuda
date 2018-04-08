@@ -63,3 +63,7 @@ export function sanitizeName (name: string): string {
 		.map(s => s[0].toLocaleUpperCase() + s.slice(1))
 		.join(' ')
 }
+
+export function addProperty<TObj extends object, TValue> (obj: TObj, key: string, value: TValue): TObj & { [key: string]: TValue} {
+	return Object.defineProperty(obj, key, { value, enumerable: true })
+}

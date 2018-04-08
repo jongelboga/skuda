@@ -12,7 +12,7 @@
 import * as fs from 'fs-extra'
 import { File, Folder } from './reader'
 import { generateSection, RenderedSection } from './section_generator'
-import { getTemplate, Properties } from './utils'
+import { addProperty, getTemplate, Properties } from './utils'
 
 /**
  * Structure describing a parsed page, ready for rendering and then saving.
@@ -82,12 +82,12 @@ export async function generatePage (page: File, folder: Folder): Promise<Rendere
  * @param pageProperties The properties object for the page
  */
 export function findPageProperties (sectionProperties: Properties, pageProperties: Properties): Properties {
-	const validValues = ['page', 'description']
+	const validKeys = ['page', 'description']
 	return Object
 		.entries(sectionProperties)
-		.filter(([key, value]) => validValues.includes(key) && value)
+		.filter(([key, value]) => validKeys.includes(key) && value)
 		.reduce(
-			(a, [key, value]) => Object.defineProperty(a, key, { value, enumerable: true }),
+			(a, [key, value]) => addProperty(a, key, value),
 			{ ...pageProperties }
 		)
 }
