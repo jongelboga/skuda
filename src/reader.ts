@@ -41,6 +41,33 @@ export interface Folder extends File {
 	folders: Folder[]
 }
 
+export interface SimpleFile {
+	path: string
+}
+export interface SimpleFolder extends SimpleFile {
+	files: string[]
+	folders: SimpleFolder[]
+}
+
+export async function getPaths (directory: string): Promise<SimpleFolder> {
+	const isDir = async (p: string) => (await fs.lstat(p)).isDirectory()
+
+	async function _readDir (dir: string): Promise<SimpleFolder> {
+		const paths = (await fs.readdir(dir)).map(p => path.join(__dirname, p))
+		// Construct and return the Folder object.
+		// - Folders are recursively calling this function to make the sub structure.
+		return {
+			path: dir,
+			files: paths.filter(p => !isDir(p)),
+			folders: await Promise.all(paths
+				.filter(isDir)
+				.map(_readDir))
+		}
+	}
+
+	return _readDir(directory)
+}
+
 /**
  * Read a directory including subdirectories and building a three object
  * containing all pages and subdirectories. The function is recursive.
