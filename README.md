@@ -126,17 +126,3 @@ To make yourself familiar with the code, read the source files in the following 
 - [writer.ts](src/writer.ts)
 
 Shared functionality can be found in [utils.ts](src/utils.ts).
-
-# Todo
-
-* Generate files in proper document structure
-* Handle media files
-    * Rescale images
-    * Reformat videos
-    * Write them to destination.
-* Make a navigation system
-* Make a default layout/css
-* Make more page and section templates
-* Make a "init" system for building a new site strucutre
-* Make Node compile a single binary file for easy installation ```</sarcasm>```
-
