@@ -41,7 +41,7 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
 	}
 
 	// Reading and compiling the main HTML template used to generate pages
-	const filepath = path.resolve(__dirname, `../${templateName}.handlebars`)
+	const filepath = path.resolve(__dirname, `../templates/${templateName}.handlebars`)
 	const template = fs.readFileSync(filepath).toString()
 
 	// Compile template to a function and store it in cache
