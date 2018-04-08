@@ -41,7 +41,7 @@ export function getTemplate (templateName: string): HandlebarsTemplateDelegate {
 	}
 
 	// Reading and compiling the main HTML template used to generate pages
-	const filepath = path.resolve(__dirname, `../${templateName}.handlebars`)
+	const filepath = path.resolve(__dirname, `../templates/${templateName}.handlebars`)
 	const template = fs.readFileSync(filepath).toString()
 
 	// Compile template to a function and store it in cache
@@ -62,4 +62,8 @@ export function sanitizeName (name: string): string {
 		.split(' ')
 		.map(s => s[0].toLocaleUpperCase() + s.slice(1))
 		.join(' ')
+}
+
+export function addProperty<TObj extends object, TValue> (obj: TObj, key: string, value: TValue): TObj & { [key: string]: TValue} {
+	return Object.defineProperty(obj, key, { value, enumerable: true })
 }
