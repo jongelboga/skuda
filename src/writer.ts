@@ -23,11 +23,15 @@ export default function writer (rootDir: string) {
      * @param  {[type]} renderedPage RenderedPage  Page to write
      */
 	function writePage (renderedPage: RenderedPage): void {
-
+		console.log('WRITE PAGE: ', renderedPage.name)
 		// TODO: outdir should be rootDir + current dir
 		const outDir = rootDir
+		const fileName = `${renderedPage.name}.html`
+		// const filePath = path.join(outDir, fileName)
 
-		fs.writeFileSync(path.join(outDir, `${renderedPage.name}.html`), renderedPage.rendered)
+		// console.log(outDir, fileName, filePath)
+
+		fs.writeFileSync(fileName, renderedPage.rendered)
 	}
 
 	return writePage

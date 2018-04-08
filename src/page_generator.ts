@@ -41,8 +41,13 @@ export type RenderedPage = ParsedPage & {
  * @param folder The folder the page belongs to
  * @param rootFolder The root of the web site
  */
-export async function generatePage (page: File, folder: Folder, rootFolder: Folder): Promise<RenderedPage> {
-	const rawContent = await fs.readFile(page.path)
+export async function generatePage(page: File, folder: Folder, rootFolder: Folder): Promise<RenderedPage> {
+
+
+	console.log('READ FILE: ', page.path)
+
+	const rawContent = '#hei' //await fs.readFile(page.path)
+
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
 	const sections = rawContent.toString().split('----')
@@ -79,7 +84,7 @@ export async function generatePage (page: File, folder: Folder, rootFolder: Fold
  * @param sectionProperties The properties found in  a section
  * @param pageProperties The properties object for the page
  */
-function findPageProperties (sectionProperties: Properties, pageProperties: Properties): void {
+function findPageProperties(sectionProperties: Properties, pageProperties: Properties): void {
 
 	// Iterating the properties object (the old fashioned way, since the type restrict usage)
 	for (const key in sectionProperties) {
@@ -99,10 +104,17 @@ function findPageProperties (sectionProperties: Properties, pageProperties: Prop
  * Render the page's Handlebars template
  * @param params
  */
-function renderPage (parsedPage: ParsedPage): RenderedPage {
-	const template = getTemplate(parsedPage.properties.template)
-	return {
-		...parsedPage,
-		rendered: template(parsedPage)
+function renderPage(parsedPage: ParsedPage): RenderedPage {
+
+	try {
+		const template = getTemplate(parsedPage.properties.template)
+		var renderedPage = {
+			...parsedPage,
+			rendered: template(parsedPage)
+		}
+	} catch (error) {
+		console.error(error)
+		console.error(error.stack)
 	}
+	return renderedPage
 }

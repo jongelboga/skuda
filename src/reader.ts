@@ -53,6 +53,7 @@ export interface Folder extends File {
  * @return {Folder}      Return a Folder object containing pages and sub folders
  */
 export async function readDir (directory: string, sitename?: string): Promise<Folder> {
+
 	async function _readDir (dir: string, name?: string): Promise<Folder> {
 		const isDir = (p: string) => fs.lstatSync(p).isDirectory()
 
