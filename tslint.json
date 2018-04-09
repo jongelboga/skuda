@@ -18,6 +18,12 @@
             "tabs",
             4
         ],
+        "ter-indent": [true, "tab", {
+            "SwitchCase": 1,
+            "MemberExpression": 1,
+            "ArrayExpression": 1,
+            "ObjectExpression": 1
+        }],
         "interface-name": [false],
         "interface-over-type-literal": false,
         "linebreak-style": [true, "LF"],

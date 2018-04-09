@@ -2,6 +2,10 @@ import * as path from 'path'
 import { findPageProperties, generatePage, RenderedPage } from '../src/page_generator'
 import { Folder } from '../src/reader'
 import { ROOT_DIR } from './constants'
+import { mockFs, restoreFs } from './utils'
+
+beforeEach(mockFs)
+afterEach(restoreFs)
 
 describe(findPageProperties, () => {
 	it('should add section props to page props', () => {

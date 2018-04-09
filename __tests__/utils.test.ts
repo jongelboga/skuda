@@ -1,4 +1,3 @@
-import * as path from 'path'
 import { sanitizeName } from '../src/utils'
 
 describe(sanitizeName, () => {
