@@ -3,10 +3,9 @@
  *
  * For now it is very simple...
  */
-import * as fs from 'fs'
+import { ensureDirSync, writeFileSync } from 'fs-extra'
 import * as path from 'path'
 import { RenderedPage } from './page_generator'
-import { mkDir } from './utils'
 
 /**
  * Make a new writer
@@ -14,8 +13,7 @@ import { mkDir } from './utils'
  * @return {[type]}      [description]
  */
 export default function writer (rootDir: string) {
-
-	mkDir(rootDir)
+	ensureDirSync(rootDir)
 
 	/*
      * Write a rendered page to disk.
@@ -23,11 +21,9 @@ export default function writer (rootDir: string) {
      * @param  {[type]} renderedPage RenderedPage  Page to write
      */
 	function writePage (renderedPage: RenderedPage): void {
-
-		// TODO: outdir should be rootDir + current dir
-		const outDir = rootDir
-
-		fs.writeFileSync(path.join(outDir, `${renderedPage.name}.html`), renderedPage.rendered)
+		const outDir = path.join(rootDir, renderedPage.folder.uri)
+		ensureDirSync(outDir)
+		writeFileSync(path.join(outDir, `${renderedPage.name}.html`), renderedPage.rendered)
 	}
 
 	return writePage

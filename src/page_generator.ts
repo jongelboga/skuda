@@ -23,6 +23,7 @@ type ParsedPage = {
 	name: string
 	properties: Properties
 	sections: RenderedSection[]
+	folder: Folder
 	footer?: string
 	footer_rendered?: string
 	description?: string
@@ -31,8 +32,7 @@ type ParsedPage = {
 			name: string
 			uri: string
 		}
-	],
-	folder: Folder
+	]
 }
 
 export type RenderedPage = ParsedPage & {

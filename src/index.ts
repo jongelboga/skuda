@@ -18,12 +18,12 @@ console.info(`Generating ${args.name || sanitizeName(srcPath)}`)
 console.info(`Scanning ${srcPath}`)
 
 readDir(srcPath)
-.then(folder => {
-	generate(outPath, folder)
-	console.info(`Site generated at ${outPath}`)
-	process.exit(0)
-})
-.catch(err => {
-	console.error(err)
-	process.exit(1)
-})
+	.then(folder => {
+		generate(outPath, folder)
+		console.info(`Site generated at ${outPath}`)
+		process.exit(0)
+	})
+	.catch(err => {
+		console.error(err)
+		process.exit(1)
+	})

@@ -1,7 +1,8 @@
 import * as path from 'path'
-import { File, Folder, getPaths, parseDir, readDir, SimpleFile, SimpleFolder } from '../src/reader'
+import { Folder, getPaths, parseDir, readDir, SimpleFolder } from '../src/reader'
 import { sanitizeName } from '../src/utils'
 import { ROOT_DIR } from './constants'
+import { mockFs, restoreFs } from './utils'
 
 const expectedFolder: Folder = {
 	name: 'Content',
@@ -36,6 +37,9 @@ const expectedFolder: Folder = {
 	]
 }
 
+beforeEach(mockFs)
+afterEach(restoreFs)
+
 describe(readDir, () => {
 	it('reads and parses folder', async () => {
 		const result = await readDir(ROOT_DIR)
@@ -66,6 +70,7 @@ describe(parseDir, () => {
 
 
 describe(getPaths, () => {
+	beforeEach(mockFs)
 	it('reads folder', async () => {
 		const result = await getPaths(ROOT_DIR)
 
