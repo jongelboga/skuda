@@ -9,29 +9,24 @@
  * like file reading.
  */
 import { generatePage, RenderedPage } from './page_generator'
-import { Folder } from './reader'
-import writer from './writer'
+import { Folder, readDir } from './reader'
+import writer, { Writer } from './writer'
 
-/**
- * Main function to generate a output folder based on a Folder structure.
- * @param {string} outDir Destination folder
- * @param {Folder} folder Folder object.
- */
-export async function generate (outDir: string, folder: Folder): Promise<void> {
+export default async function generate (srcPath: string, outDir: string) {
+	const folder = await readDir(srcPath)
 	const writePage = writer(outDir)
+	recursiveGen(folder, writePage)
+}
 
-	// Recursive function for traversing the Folder tree structure and
-	// generate files.
-	async function recursiveGen (f: Folder) {
+// Recursive function for traversing the Folder tree structure and
+// generate files.
+async function recursiveGen (f: Folder, writePage: Writer) {
 
-		// Generate each individual page
-		const renderedPages: RenderedPage[] = await Promise.all(f.pages.map(page => generatePage(page, f)))
-		// Write the pages to disk
-		renderedPages.forEach(writePage)
+	// Generate each individual page
+	const renderedPages: RenderedPage[] = await Promise.all(f.pages.map(page => generatePage(page, f)))
+	// Write the pages to disk
+	renderedPages.forEach(writePage)
 
-		// Recuresively generate all sub folders
-		f.folders.map(recursiveGen)
-	}
-
-	recursiveGen(folder)
+	// Recuresively generate all sub folders
+	f.folders.forEach(folder => recursiveGen(folder, writePage))
 }

@@ -7,12 +7,14 @@ import { ensureDirSync, writeFileSync } from 'fs-extra'
 import * as path from 'path'
 import { RenderedPage } from './page_generator'
 
+export type Writer = (page: RenderedPage) => void
+
 /**
  * Make a new writer
  * @param  {[type]} out: string        [description]
  * @return {[type]}      [description]
  */
-export default function writer (rootDir: string) {
+export default function writer (rootDir: string): Writer {
 	ensureDirSync(rootDir)
 
 	/*

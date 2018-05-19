@@ -3,8 +3,7 @@
  */
 import * as path from 'path'
 import args from './args'
-import { generate } from './generator'
-import { readDir } from './reader'
+import generate from './generator'
 import { sanitizeName } from './utils'
 
 // TODO:
@@ -17,13 +16,18 @@ const srcPath = path.resolve(process.cwd(), args.src)
 console.info(`Generating ${args.name || sanitizeName(srcPath)}`)
 console.info(`Scanning ${srcPath}`)
 
-readDir(srcPath)
-	.then(folder => {
-		generate(outPath, folder)
+generate(srcPath, outPath)
+
+async function run () {
+	try {
+		await generate(srcPath, outPath)
+
 		console.info(`Site generated at ${outPath}`)
 		process.exit(0)
-	})
-	.catch(err => {
+	} catch (err) {
 		console.error(err)
 		process.exit(1)
-	})
+	}
+}
+
+run()
