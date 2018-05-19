@@ -1,5 +1,5 @@
 import * as path from 'path'
-import { generate } from '../src/generator'
+import generate from '../src/generator'
 import { getPaths, readDir, SimpleFolder } from '../src/reader'
 import { ROOT_DIR } from './constants'
 import { mockFs, restoreFs } from './utils'
@@ -11,10 +11,9 @@ afterEach(restoreFs)
 describe(generate, () => {
 
 	it('writes to folder with correct structure', async () => {
-		const folder = await readDir(ROOT_DIR)
 		const out = path.join(__dirname, 'dist')
 
-		await generate(out, folder)
+		await generate(ROOT_DIR, out)
 
 		const paths = await getPaths(path.resolve('/'))
 		const result = findFolder(paths, f => f.path === out)
