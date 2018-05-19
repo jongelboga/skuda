@@ -24,6 +24,7 @@
             "ArrayExpression": 1,
             "ObjectExpression": 1
         }],
+        "import-blacklist": [true, "fs"],
         "interface-name": [false],
         "interface-over-type-literal": false,
         "linebreak-style": [true, "LF"],
