@@ -63,10 +63,9 @@ export async function generatePage (page: File, folder: Folder): Promise<Rendere
 	// The Page Properties are set inside a section.
 	// We need to iterate all of them and move page properties from the section
 	// to the page.
-	parsedPage.sections = parsedPage.sections.map(section => ({
-		...section,
-		properties: findPageProperties(section.properties, parsedPage.properties)
-	}))
+	for (const section of parsedPage.sections) {
+		parsedPage.properties = findPageProperties(section.properties, parsedPage.properties)
+	}
 
 	// Set the page's template name, if set in properties
 	parsedPage.properties.template = parsedPage.properties.page || parsedPage.properties.template

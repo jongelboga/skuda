@@ -38,7 +38,9 @@ describe(generatePage, () => {
 		const expected: RenderedPage = {
 			name: page.name,
 			properties: {
-				template: 'page'
+				template: 'page',
+				description: 'This is the cool test page',
+				page: 'page'
 			},
 			sections: result.sections,
 			folder,
