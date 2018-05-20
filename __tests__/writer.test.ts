@@ -16,6 +16,7 @@ describe(writer, () => {
 			folder: {
 				name: 'Folder',
 				pages: [],
+				media: [],
 				path: path.join(out, 'Folder'),
 				uri: 'Folder',
 				folders: []
@@ -26,7 +27,7 @@ describe(writer, () => {
 		}
 
 		const write = writer(out)
-		write(page)
+		write.writePage(page)
 
 		const result = await getPaths(out)
 		const expected = {

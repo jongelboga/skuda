@@ -30,6 +30,7 @@ describe(generatePage, () => {
 			path: path.join(ROOT_DIR, 'Projects'),
 			uri: 'Projects',
 			pages: [page],
+			media: [],
 			folders: []
 		}
 

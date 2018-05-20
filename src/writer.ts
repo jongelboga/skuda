@@ -3,11 +3,15 @@
  *
  * For now it is very simple...
  */
-import { ensureDirSync, writeFileSync } from 'fs-extra'
+import { ensureDirSync, readFileSync, writeFileSync } from 'fs-extra'
 import * as path from 'path'
 import { RenderedPage } from './page_generator'
+import { Media } from './reader'
 
-export type Writer = (page: RenderedPage) => void
+export type Writer = {
+	writePage: (page: RenderedPage) => void
+	writeMedia: (media: Media) => void
+}
 
 /**
  * Make a new writer
@@ -22,11 +26,20 @@ export default function writer (rootDir: string): Writer {
      *
      * @param  {[type]} renderedPage RenderedPage  Page to write
      */
-	function writePage (renderedPage: RenderedPage): void {
+	function writePage (renderedPage: RenderedPage) {
 		const outDir = path.join(rootDir, renderedPage.folder.uri)
 		ensureDirSync(outDir)
 		writeFileSync(path.join(outDir, `${renderedPage.name}.html`), renderedPage.rendered)
 	}
 
-	return writePage
+	function writeMedia (media: Media) {
+		const outPath = path.join(rootDir, media.uri)
+		ensureDirSync(path.dirname(outPath))
+		writeFileSync(outPath, readFileSync(media.path))
+	}
+
+	return {
+		writePage,
+		writeMedia
+	}
 }
