@@ -82,7 +82,8 @@ describe(getPaths, () => {
 					path: path.join(ROOT_DIR, 'Projects'),
 					files: [
 						path.join(ROOT_DIR, 'Projects', '01.md'),
-						path.join(ROOT_DIR, 'Projects', '02.md')
+						path.join(ROOT_DIR, 'Projects', '02.md'),
+						path.join(ROOT_DIR, 'Projects', 'house.jpg')
 					],
 					folders: []
 				}

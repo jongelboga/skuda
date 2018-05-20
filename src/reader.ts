@@ -82,6 +82,7 @@ export function parseDir (rootFolder: SimpleFolder): Folder {
 			path: folder.path,
 			uri: path.relative(rootFolder.path, folder.path),
 			pages: folder.files
+				.filter(file => path.extname(file) === '.md')
 				.map(file => ({
 					name: sanitizeName(file),
 					path: file,
