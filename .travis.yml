@@ -9,5 +9,9 @@ script:
   - yarn test:cover
   - yarn build
 
+os:
+  - linux
+  - osx
+
 notifications:
   email: false
