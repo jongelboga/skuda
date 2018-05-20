@@ -45,7 +45,7 @@ export type RenderedPage = ParsedPage & {
  * @param folder The folder the page belongs to
  */
 export async function generatePage (page: File, folder: Folder): Promise<RenderedPage> {
-	const rawContent = await fs.readFile(page.path)
+	const rawContent = fs.readFileSync(page.path) // TODO: Figure out why this can't be async
 	// Split content into sections (we use ---- as section delimiter)
 	// and parse+render each section
 	const sections = rawContent.toString().split('----')
