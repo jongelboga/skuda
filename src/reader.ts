@@ -11,7 +11,9 @@
  *
  */
 import * as fs from 'fs-extra'
+import { lookup } from 'mime-types'
 import * as path from 'path'
+import { SUPPORTED_FORMATS } from './constants'
 import { sanitizeName } from './utils'
 
 
@@ -90,12 +92,12 @@ export function parseDir (rootFolder: SimpleFolder): Folder {
 				})),
 			folders: folder.folders.map(_parseDir),
 			media: folder.files
-				.filter(file => path.extname(file) === '.jpg')
+				.filter(file => SUPPORTED_FORMATS.includes(path.extname(file)))
 				.map<Media>(file => ({
 					name: sanitizeName(file),
 					path: file,
 					uri: path.relative(rootFolder.path, file),
-					contentType: 'image/jpeg'
+					contentType: lookup(file) || 'application/octet-stream'
 				}))
 		}
 	}
