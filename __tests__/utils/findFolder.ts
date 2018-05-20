@@ -1,4 +1,4 @@
-import { SimpleFile, SimpleFolder } from '../../src/reader'
+import { SimpleFolder } from '../../src/reader'
 
 type Predicate = (f: SimpleFolder) => boolean
 
