@@ -11,7 +11,9 @@
  *
  */
 import * as fs from 'fs-extra'
+import { lookup } from 'mime-types'
 import * as path from 'path'
+import { SUPPORTED_FORMATS } from './constants'
 import { sanitizeName } from './utils'
 
 
@@ -29,7 +31,6 @@ export interface File {
  * to rescale and convert files to different formats.
  */
 export interface Media extends File {
-	absolutePath: string
 	contentType: string
 }
 
@@ -38,6 +39,7 @@ export interface Media extends File {
  */
 export interface Folder extends File {
 	pages: File[]
+	media: Media[]
 	folders: Folder[]
 }
 
@@ -82,12 +84,21 @@ export function parseDir (rootFolder: SimpleFolder): Folder {
 			path: folder.path,
 			uri: path.relative(rootFolder.path, folder.path),
 			pages: folder.files
+				.filter(file => path.extname(file) === '.md')
 				.map(file => ({
 					name: sanitizeName(file),
 					path: file,
 					uri: path.relative(rootFolder.path, file)
 				})),
-			folders: folder.folders.map(_parseDir)
+			folders: folder.folders.map(_parseDir),
+			media: folder.files
+				.filter(file => SUPPORTED_FORMATS.includes(path.extname(file)))
+				.map<Media>(file => ({
+					name: sanitizeName(file),
+					path: file,
+					uri: path.relative(rootFolder.path, file),
+					contentType: lookup(file) || 'application/octet-stream'
+				}))
 		}
 	}
 

@@ -8,6 +8,7 @@ const expectedFolder: Folder = {
 	name: 'Content',
 	path: ROOT_DIR,
 	uri: '',
+	media: [],
 	pages: [
 		  {
 			name: 'About',
@@ -30,6 +31,14 @@ const expectedFolder: Folder = {
 					name: '02',
 					path: path.join(ROOT_DIR, 'Projects', '02.md'),
 					uri: path.join('Projects', '02.md')
+				}
+			],
+			media: [
+				{
+					contentType: 'image/jpeg',
+					name: 'House',
+					path: path.join(ROOT_DIR, 'Projects', 'house.jpg'),
+					uri: path.join('Projects', 'house.jpg')
 				}
 			],
 			folders: []
@@ -82,7 +91,8 @@ describe(getPaths, () => {
 					path: path.join(ROOT_DIR, 'Projects'),
 					files: [
 						path.join(ROOT_DIR, 'Projects', '01.md'),
-						path.join(ROOT_DIR, 'Projects', '02.md')
+						path.join(ROOT_DIR, 'Projects', '02.md'),
+						path.join(ROOT_DIR, 'Projects', 'house.jpg')
 					],
 					folders: []
 				}

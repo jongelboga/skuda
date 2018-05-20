@@ -26,7 +26,8 @@ describe(generate, () => {
 					path: path.join(out, 'Projects'),
 					files: [
 				  		path.join(out, 'Projects', '01.html'),
-				  		path.join(out, 'Projects', '02.html')
+				  		path.join(out, 'Projects', '02.html'),
+				  		path.join(out, 'Projects', 'house.jpg')
 					],
 					folders: []
 			  	}
