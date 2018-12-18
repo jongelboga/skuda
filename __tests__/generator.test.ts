@@ -1,6 +1,6 @@
 import * as path from 'path'
 import generate from '../src/generator'
-import { getPaths, readDir, SimpleFolder } from '../src/reader'
+import { getPaths, SimpleFolder } from '../src/reader'
 import { ROOT_DIR } from './constants'
 import { mockFs, restoreFs } from './utils'
 import { findFolder } from './utils'
@@ -38,4 +38,3 @@ describe(generate, () => {
 	})
 
 })
-

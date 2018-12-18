@@ -8,12 +8,11 @@ afterEach(restoreFs)
 
 describe('mockfs', () => {
 
-	it('writes to folder with correct structure', async () => {
-		await fs.mkdirp('hello')
-		await fs.writeFile(path.join('hello', 'world.txt'), 'i am a file')
-		const dir = await fs.readdir('hello')
+	it('writes to folder with correct structure', () => {
+		fs.mkdirpSync('hello')
+		fs.writeFileSync(path.join('hello', 'world.txt'), 'i am a file')
+		const dir = fs.readdirSync('hello')
 		expect(dir).toEqual([ 'world.txt' ])
 	})
 
 })
-

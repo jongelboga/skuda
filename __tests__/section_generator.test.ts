@@ -1,6 +1,6 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
-import { generateSection, ParsedSection, RenderedSection } from '../src/section_generator'
+import { generateSection, RenderedSection } from '../src/section_generator'
 import { ROOT_DIR } from './constants'
 import { mockFs, restoreFs } from './utils'
 
